@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AudioRezkaApp" GeneratedClassName="Settings1">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AudioRezkaApp" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="MainFormLocation" Type="System.Drawing.Point" Scope="User">
@@ -7,6 +7,9 @@
     </Setting>
     <Setting Name="MainFormSize" Type="System.Drawing.Size" Scope="User">
       <Value Profile="(Default)">400, 400</Value>
+    </Setting>
+    <Setting Name="WorkFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

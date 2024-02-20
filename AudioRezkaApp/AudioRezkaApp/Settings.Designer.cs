@@ -46,5 +46,17 @@ namespace AudioRezkaApp {
                 this["MainFormSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WorkFolder {
+            get {
+                return ((string)(this["WorkFolder"]));
+            }
+            set {
+                this["WorkFolder"] = value;
+            }
+        }
     }
 }
