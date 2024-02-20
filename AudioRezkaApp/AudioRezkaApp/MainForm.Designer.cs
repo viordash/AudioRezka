@@ -32,7 +32,10 @@
             ClientSize = new Size(616, 486);
             FormBorderStyle = FormBorderStyle.SizableToolWindow;
             Name = "MainForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "AudioRezka";
+            FormClosed += MainForm_FormClosed;
+            Load += MainForm_Load;
             ResumeLayout(false);
         }
 
