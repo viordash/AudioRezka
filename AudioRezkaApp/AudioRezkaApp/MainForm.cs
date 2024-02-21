@@ -107,16 +107,45 @@ namespace AudioRezkaApp {
         }
 
         void DataAvailable(object? sender, WaveInEventArgs args) {
+            var peakValue = GetPeakValue(args.Buffer);
+
+            ShowSignalLevel(peakValue);
             lock(lockWrite) {
                 if(writer != null) {
                     writer.Write(args.Buffer, 0, args.BytesRecorded);
-                    Debug.WriteLine($"data: {args.BytesRecorded}");
 
                     //if(writer.Position > waveIn.WaveFormat.AverageBytesPerSecond * 30) {
                     //    waveIn.StopRecording();
                     //}
                 }
             }
+        }
+
+        float GetPeakValue(ReadOnlySpan<byte> pcm) {
+            float max = 0;
+            // interpret as 16 bit audio
+            for(var index = 0; index < pcm.Length; index += 2) {
+                short sample = (short)((pcm[index + 1] << 8) |
+                                        pcm[index + 0]);
+
+                var sample32 = sample / 32768f;
+                if(sample32 < 0) sample32 = -sample32;
+                if(sample32 > max) max = sample32;
+            }
+            return max;
+        }
+
+        DateTime updateSignalLevel = DateTime.Now;
+        void ShowSignalLevel(float peakValue) {
+            if(DateTime.Now - updateSignalLevel < TimeSpan.FromMilliseconds(200)) {
+                return;
+            }
+            BeginInvoke(() => {
+                pbSignalLevel.Value = (int)(pbSignalLevel.Maximum * peakValue);
+                updateSignalLevel = DateTime.Now;
+
+                Debug.WriteLine($"ShowSignalLevel: {updateSignalLevel.Millisecond}");
+            });
         }
     }
 }
