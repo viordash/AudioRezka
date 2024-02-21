@@ -110,7 +110,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(10, 244);
+            label3.Location = new Point(10, 242);
             label3.Name = "label3";
             label3.Size = new Size(152, 15);
             label3.TabIndex = 10;
@@ -119,7 +119,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(213, 244);
+            label5.Location = new Point(182, 242);
             label5.Name = "label5";
             label5.Size = new Size(132, 15);
             label5.TabIndex = 13;
@@ -145,25 +145,25 @@
             edStartNumber.Location = new Point(23, 148);
             edStartNumber.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             edStartNumber.Name = "edStartNumber";
-            edStartNumber.Size = new Size(65, 23);
+            edStartNumber.Size = new Size(85, 23);
             edStartNumber.TabIndex = 8;
             // 
             // edMinVoiceDuration
             // 
-            edMinVoiceDuration.Location = new Point(23, 262);
+            edMinVoiceDuration.Location = new Point(23, 260);
             edMinVoiceDuration.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             edMinVoiceDuration.Name = "edMinVoiceDuration";
-            edMinVoiceDuration.Size = new Size(65, 23);
+            edMinVoiceDuration.Size = new Size(85, 23);
             edMinVoiceDuration.TabIndex = 11;
             edMinVoiceDuration.Value = new decimal(new int[] { 3, 0, 0, 0 });
             edMinVoiceDuration.ValueChanged += edMinVoiceDuration_ValueChanged;
             // 
             // edMinSilenceDuration
             // 
-            edMinSilenceDuration.Location = new Point(226, 262);
+            edMinSilenceDuration.Location = new Point(196, 260);
             edMinSilenceDuration.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             edMinSilenceDuration.Name = "edMinSilenceDuration";
-            edMinSilenceDuration.Size = new Size(65, 23);
+            edMinSilenceDuration.Size = new Size(85, 23);
             edMinSilenceDuration.TabIndex = 14;
             edMinSilenceDuration.Value = new decimal(new int[] { 700, 0, 0, 0 });
             edMinSilenceDuration.ValueChanged += edMinSilenceDuration_ValueChanged;
@@ -210,7 +210,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(92, 265);
+            label7.Location = new Point(114, 264);
             label7.Name = "label7";
             label7.Size = new Size(29, 15);
             label7.TabIndex = 20;
@@ -219,7 +219,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(297, 265);
+            label8.Location = new Point(287, 264);
             label8.Name = "label8";
             label8.Size = new Size(40, 15);
             label8.TabIndex = 21;
@@ -230,16 +230,16 @@
             edSampleRate.DropDownStyle = ComboBoxStyle.DropDownList;
             edSampleRate.FormattingEnabled = true;
             edSampleRate.Items.AddRange(new object[] { "8000", "16000", "22050", "32000", "44100", "48000" });
-            edSampleRate.Location = new Point(23, 206);
+            edSampleRate.Location = new Point(23, 204);
             edSampleRate.Name = "edSampleRate";
-            edSampleRate.Size = new Size(65, 23);
+            edSampleRate.Size = new Size(85, 23);
             edSampleRate.TabIndex = 22;
             edSampleRate.SelectedIndexChanged += edSampleRate_SelectedIndexChanged;
             // 
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(10, 188);
+            label9.Location = new Point(10, 186);
             label9.Name = "label9";
             label9.Size = new Size(72, 15);
             label9.TabIndex = 23;
@@ -248,7 +248,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(138, 188);
+            label10.Location = new Point(182, 186);
             label10.Name = "label10";
             label10.Size = new Size(90, 15);
             label10.TabIndex = 25;
@@ -259,9 +259,9 @@
             edBitsPerSample.DropDownStyle = ComboBoxStyle.DropDownList;
             edBitsPerSample.FormattingEnabled = true;
             edBitsPerSample.Items.AddRange(new object[] { "8", "16", "24", "32" });
-            edBitsPerSample.Location = new Point(152, 206);
+            edBitsPerSample.Location = new Point(196, 204);
             edBitsPerSample.Name = "edBitsPerSample";
-            edBitsPerSample.Size = new Size(65, 23);
+            edBitsPerSample.Size = new Size(85, 23);
             edBitsPerSample.TabIndex = 24;
             edBitsPerSample.SelectedIndexChanged += edSampleRate_SelectedIndexChanged;
             // 
