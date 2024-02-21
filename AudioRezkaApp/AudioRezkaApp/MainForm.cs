@@ -1,8 +1,14 @@
+using System.Diagnostics;
 using AudioRezkaApp.Helpers;
+using NAudio.Wave;
 
 namespace AudioRezkaApp {
     public partial class MainForm : Form {
         bool recording;
+
+        WaveInEvent? waveIn = null;
+        WaveFileWriter? writer = null;
+        object lockWrite = new();
 
         public MainForm() {
             InitializeComponent();
@@ -16,9 +22,11 @@ namespace AudioRezkaApp {
             edMinVoiceDuration.Value = Settings.Default.MinVoiceDuration;
             edMinSilenceDuration.Value = Settings.Default.MinSilenceDuration;
             edSilenceThreshold.Value = Settings.Default.SilenceThreshold;
+            OpenAudio();
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e) {
+            CloseAudio();
             Settings.Default.MainFormLocation = Location;
             Settings.Default.WorkFolder = edWorkFolder.Text;
             Settings.Default.FilenamePrefix = edFilenamePrefix.Text;
@@ -35,9 +43,11 @@ namespace AudioRezkaApp {
             if(recording) {
                 btnRecord.BackColor = Color.FromArgb(255, 128, 128);
                 btnRecord.Text = "RECORD";
+                StartRecording();
             } else {
                 btnRecord.BackColor = SystemColors.Control;
                 btnRecord.Text = "PAUSE";
+                PauseRecording();
             }
         }
 
@@ -48,5 +58,65 @@ namespace AudioRezkaApp {
             edWorkFolder.Text = folderBrowserDialog1.SelectedPath;
         }
 
+        void OpenAudio() {
+            Debug.WriteLine("OpenAudio...");
+            waveIn = new WaveInEvent();
+            waveIn.WaveFormat = new WaveFormat(44100, 16, 2);
+            waveIn.DataAvailable += DataAvailable;
+            waveIn?.StartRecording();
+            Debug.WriteLine("OpenAudio... ok");
+        }
+
+        void CloseAudio() {
+            Debug.WriteLine("CloseAudio...");
+            if(waveIn == null) {
+                return;
+            }
+            waveIn.StopRecording();
+            waveIn.DataAvailable -= DataAvailable;
+            waveIn.Dispose();
+            waveIn = null;
+            Debug.WriteLine("CloseAudio... ok");
+        }
+
+        void StartRecording() {
+            Debug.WriteLine("StartRecording...");
+            if(waveIn == null) {
+                throw new Exception("WaveInEvent not ready");
+            }
+            var outputFolder = edWorkFolder.Text;
+            Directory.CreateDirectory(outputFolder);
+            var outputFilePath = Path.Combine(outputFolder, $"{edFilenamePrefix.Text}{edStartNumber.Value.ToString()}");
+            outputFilePath = Path.ChangeExtension(outputFilePath, ".wav");
+
+            lock(lockWrite) {
+                writer = new WaveFileWriter(outputFilePath, waveIn.WaveFormat);
+            }
+            Debug.WriteLine("StartRecording... ok");
+        }
+
+        void PauseRecording() {
+            Debug.WriteLine("PauseRecording...");
+            lock(lockWrite) {
+                writer?.Flush();
+                writer?.Dispose();
+                writer = null;
+            }
+            edStartNumber.Value++;
+            Debug.WriteLine("PauseRecording... ok");
+        }
+
+        void DataAvailable(object? sender, WaveInEventArgs args) {
+            lock(lockWrite) {
+                if(writer != null) {
+                    writer.Write(args.Buffer, 0, args.BytesRecorded);
+                    Debug.WriteLine($"data: {args.BytesRecorded}");
+
+                    //if(writer.Position > waveIn.WaveFormat.AverageBytesPerSecond * 30) {
+                    //    waveIn.StopRecording();
+                    //}
+                }
+            }
+        }
     }
 }
