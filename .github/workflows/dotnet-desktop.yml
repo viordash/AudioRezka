@@ -47,12 +47,12 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: AudioRezkaApp-win64_sc
-        path: ./out/win64_sfsc/
+        path: ./out/win64_sc/
         retention-days: 90        
 
     - name: Deploy Win64 single file 
       uses: actions/upload-artifact@v4
       with:
         name: AudioRezkaApp-win64_sf
-        path: ./out/win64_sfsc/
+        path: ./out/win64_sf/
         retention-days: 90
