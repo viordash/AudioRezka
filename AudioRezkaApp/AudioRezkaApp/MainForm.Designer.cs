@@ -59,7 +59,7 @@
             // btnRecord
             // 
             btnRecord.BackColor = SystemColors.Control;
-            btnRecord.Location = new Point(3, 101);
+            btnRecord.Location = new Point(3, 83);
             btnRecord.Name = "btnRecord";
             btnRecord.Size = new Size(340, 46);
             btnRecord.TabIndex = 0;
@@ -186,9 +186,9 @@
             panel1.Controls.Add(label4);
             panel1.Controls.Add(btnRecord);
             panel1.ForeColor = SystemColors.ControlText;
-            panel1.Location = new Point(5, 300);
+            panel1.Location = new Point(5, 298);
             panel1.Name = "panel1";
-            panel1.Size = new Size(348, 152);
+            panel1.Size = new Size(348, 135);
             panel1.TabIndex = 18;
             // 
             // pbSignalLevel
@@ -269,7 +269,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(360, 457);
+            ClientSize = new Size(360, 439);
             Controls.Add(label10);
             Controls.Add(edBitsPerSample);
             Controls.Add(label9);

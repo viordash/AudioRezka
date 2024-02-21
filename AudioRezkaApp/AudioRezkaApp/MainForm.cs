@@ -16,6 +16,8 @@ namespace AudioRezkaApp {
         int minVoiceDuration;
         DateTime timerSilence;
         DateTime timerSignalLevel;
+        float avgSignalLevel;
+        int cntSignalLevel;
 
         int SampleRate {
             get => int.TryParse(edSampleRate.Text, out int sampleRate)
@@ -116,6 +118,8 @@ namespace AudioRezkaApp {
             lock(lockWrite) {
                 timerSilence = DateTime.Now;
                 timerSignalLevel = DateTime.Now;
+                avgSignalLevel = 0;
+                cntSignalLevel = 0;
                 writer = new WaveFileWriter(outputFilePath, waveIn.WaveFormat);
             }
             btnRecord.BackColor = Color.FromArgb(255, 128, 128);
@@ -143,7 +147,6 @@ namespace AudioRezkaApp {
             var peakValue = PeakCalcHelper.GetPeak(waveIn!.WaveFormat.BitsPerSample, args.Buffer);
             ShowSignalLevel(peakValue);
 
-            var buffer = new WaveBuffer(args.Buffer);
             lock(lockWrite) {
                 if(writer != null) {
                     writer.Write(args.Buffer, 0, args.BytesRecorded);
@@ -182,13 +185,19 @@ namespace AudioRezkaApp {
 
         void ShowSignalLevel(float peakValue) {
             if(DateTime.Now - timerSignalLevel < TimeSpan.FromMilliseconds(200)) {
+                avgSignalLevel += peakValue;
+                cntSignalLevel++;
                 return;
             }
-            BeginInvoke(() => {
-                pbSignalLevel.Value = (int)(pbSignalLevel.Maximum * peakValue);
-                timerSignalLevel = DateTime.Now;
 
-                //Debug.WriteLine($"ShowSignalLevel: {timerSignalLevel.Millisecond}");
+            BeginInvoke(() => {
+                pbSignalLevel.Value = cntSignalLevel > 0
+                    ? (int)(pbSignalLevel.Maximum * (avgSignalLevel / cntSignalLevel))
+                    : 0;
+                timerSignalLevel = DateTime.Now;
+                //Debug.WriteLine($"ShowSignalLevel: {cntSignalLevel}");
+                avgSignalLevel = 0;
+                cntSignalLevel = 0;
             });
         }
 
