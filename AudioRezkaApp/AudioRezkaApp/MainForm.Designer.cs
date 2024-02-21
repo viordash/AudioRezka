@@ -43,6 +43,12 @@
             panel1 = new Panel();
             pbSignalLevel = new ProgressBar();
             label6 = new Label();
+            label7 = new Label();
+            label8 = new Label();
+            edSampleRate = new ComboBox();
+            label9 = new Label();
+            label10 = new Label();
+            edBitsPerSample = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)edStartNumber).BeginInit();
             ((System.ComponentModel.ISupportInitialize)edMinVoiceDuration).BeginInit();
             ((System.ComponentModel.ISupportInitialize)edMinSilenceDuration).BeginInit();
@@ -86,7 +92,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(10, 76);
+            label1.Location = new Point(10, 74);
             label1.Name = "label1";
             label1.Size = new Size(111, 15);
             label1.TabIndex = 4;
@@ -95,7 +101,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(10, 131);
+            label2.Location = new Point(10, 130);
             label2.Name = "label2";
             label2.Size = new Size(151, 15);
             label2.TabIndex = 7;
@@ -104,20 +110,20 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(10, 187);
+            label3.Location = new Point(10, 244);
             label3.Name = "label3";
-            label3.Size = new Size(207, 15);
+            label3.Size = new Size(152, 15);
             label3.TabIndex = 10;
-            label3.Text = "Minimum duration of audio data, sec:";
+            label3.Text = "Min duration of audio data:";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(10, 245);
+            label5.Location = new Point(213, 244);
             label5.Name = "label5";
-            label5.Size = new Size(198, 15);
+            label5.Size = new Size(132, 15);
             label5.TabIndex = 13;
-            label5.Text = "Minimum duration of silence, msec:";
+            label5.Text = "Min duration of silence:";
             // 
             // edWorkFolder
             // 
@@ -129,35 +135,35 @@
             // 
             // edFilenamePrefix
             // 
-            edFilenamePrefix.Location = new Point(23, 94);
+            edFilenamePrefix.Location = new Point(23, 92);
             edFilenamePrefix.Name = "edFilenamePrefix";
             edFilenamePrefix.Size = new Size(327, 23);
             edFilenamePrefix.TabIndex = 5;
             // 
             // edStartNumber
             // 
-            edStartNumber.Location = new Point(23, 149);
+            edStartNumber.Location = new Point(23, 148);
             edStartNumber.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             edStartNumber.Name = "edStartNumber";
-            edStartNumber.Size = new Size(97, 23);
+            edStartNumber.Size = new Size(65, 23);
             edStartNumber.TabIndex = 8;
             // 
             // edMinVoiceDuration
             // 
-            edMinVoiceDuration.Location = new Point(23, 205);
+            edMinVoiceDuration.Location = new Point(23, 262);
             edMinVoiceDuration.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             edMinVoiceDuration.Name = "edMinVoiceDuration";
-            edMinVoiceDuration.Size = new Size(97, 23);
+            edMinVoiceDuration.Size = new Size(65, 23);
             edMinVoiceDuration.TabIndex = 11;
             edMinVoiceDuration.Value = new decimal(new int[] { 3, 0, 0, 0 });
             edMinVoiceDuration.ValueChanged += edMinVoiceDuration_ValueChanged;
             // 
             // edMinSilenceDuration
             // 
-            edMinSilenceDuration.Location = new Point(23, 263);
+            edMinSilenceDuration.Location = new Point(226, 262);
             edMinSilenceDuration.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             edMinSilenceDuration.Name = "edMinSilenceDuration";
-            edMinSilenceDuration.Size = new Size(97, 23);
+            edMinSilenceDuration.Size = new Size(65, 23);
             edMinSilenceDuration.TabIndex = 14;
             edMinSilenceDuration.Value = new decimal(new int[] { 700, 0, 0, 0 });
             edMinSilenceDuration.ValueChanged += edMinSilenceDuration_ValueChanged;
@@ -201,11 +207,75 @@
             label6.TabIndex = 19;
             label6.Text = "Folder with working files:";
             // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(92, 265);
+            label7.Name = "label7";
+            label7.Size = new Size(29, 15);
+            label7.TabIndex = 20;
+            label7.Text = "secs";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(297, 265);
+            label8.Name = "label8";
+            label8.Size = new Size(40, 15);
+            label8.TabIndex = 21;
+            label8.Text = "msecs";
+            // 
+            // edSampleRate
+            // 
+            edSampleRate.DropDownStyle = ComboBoxStyle.DropDownList;
+            edSampleRate.FormattingEnabled = true;
+            edSampleRate.Items.AddRange(new object[] { "8000", "16000", "22050", "32000", "44100", "48000" });
+            edSampleRate.Location = new Point(23, 206);
+            edSampleRate.Name = "edSampleRate";
+            edSampleRate.Size = new Size(65, 23);
+            edSampleRate.TabIndex = 22;
+            edSampleRate.SelectedIndexChanged += edSampleRate_SelectedIndexChanged;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(10, 188);
+            label9.Name = "label9";
+            label9.Size = new Size(72, 15);
+            label9.TabIndex = 23;
+            label9.Text = "Sample rate:";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(138, 188);
+            label10.Name = "label10";
+            label10.Size = new Size(90, 15);
+            label10.TabIndex = 25;
+            label10.Text = "Bits per sample:";
+            // 
+            // edBitsPerSample
+            // 
+            edBitsPerSample.DropDownStyle = ComboBoxStyle.DropDownList;
+            edBitsPerSample.FormattingEnabled = true;
+            edBitsPerSample.Items.AddRange(new object[] { "8", "16", "24", "32" });
+            edBitsPerSample.Location = new Point(152, 206);
+            edBitsPerSample.Name = "edBitsPerSample";
+            edBitsPerSample.Size = new Size(65, 23);
+            edBitsPerSample.TabIndex = 24;
+            edBitsPerSample.SelectedIndexChanged += edSampleRate_SelectedIndexChanged;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(360, 457);
+            Controls.Add(label10);
+            Controls.Add(edBitsPerSample);
+            Controls.Add(label9);
+            Controls.Add(edSampleRate);
+            Controls.Add(label8);
+            Controls.Add(label7);
             Controls.Add(label6);
             Controls.Add(panel1);
             Controls.Add(edMinSilenceDuration);
@@ -257,5 +327,11 @@
         private Panel panel1;
         private Label label6;
         private ProgressBar pbSignalLevel;
+        private Label label7;
+        private Label label8;
+        private ComboBox edSampleRate;
+        private Label label9;
+        private Label label10;
+        private ComboBox edBitsPerSample;
     }
 }

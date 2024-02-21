@@ -118,5 +118,29 @@ namespace AudioRezkaApp {
                 this["SilenceThreshold"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16000")]
+        public int SampleRate {
+            get {
+                return ((int)(this["SampleRate"]));
+            }
+            set {
+                this["SampleRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        public int BitsPerSample {
+            get {
+                return ((int)(this["BitsPerSample"]));
+            }
+            set {
+                this["BitsPerSample"] = value;
+            }
+        }
     }
 }

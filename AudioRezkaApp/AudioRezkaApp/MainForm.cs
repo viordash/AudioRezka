@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using AudioRezkaApp.Helpers;
 using NAudio.Wave;
 
@@ -16,6 +17,18 @@ namespace AudioRezkaApp {
         DateTime timerSilence;
         DateTime timerSignalLevel;
 
+        int SampleRate {
+            get => int.TryParse(edSampleRate.Text, out int sampleRate)
+                ? sampleRate
+                : Settings.Default.SampleRate;
+        }
+
+        int BitsPerSample {
+            get => int.TryParse(edBitsPerSample.Text, out int bitsPerSample)
+                ? bitsPerSample
+                : Settings.Default.BitsPerSample;
+        }
+
         public MainForm() {
             InitializeComponent();
         }
@@ -28,6 +41,9 @@ namespace AudioRezkaApp {
             edMinVoiceDuration.Value = Settings.Default.MinVoiceDuration;
             edMinSilenceDuration.Value = Settings.Default.MinSilenceDuration;
             edSilenceThreshold.Value = Settings.Default.SilenceThreshold;
+            edSampleRate.Text = Settings.Default.SampleRate.ToString();
+            edBitsPerSample.Text = Settings.Default.BitsPerSample.ToString();
+
             silenceThreshold = edSilenceThreshold.Value / 100f;
             minSilenceDuration = (int)edMinSilenceDuration.Value;
             minVoiceDuration = (int)edMinVoiceDuration.Value;
@@ -42,7 +58,9 @@ namespace AudioRezkaApp {
             Settings.Default.StartNumber = (int)edStartNumber.Value;
             Settings.Default.MinVoiceDuration = (int)edMinVoiceDuration.Value;
             Settings.Default.MinSilenceDuration = (int)edMinSilenceDuration.Value;
-            Settings.Default.SilenceThreshold = (int)edSilenceThreshold.Value;
+            Settings.Default.SilenceThreshold = edSilenceThreshold.Value;
+            Settings.Default.SampleRate = SampleRate;
+            Settings.Default.BitsPerSample = BitsPerSample;
             Settings.Default.Save();
         }
 
@@ -64,10 +82,11 @@ namespace AudioRezkaApp {
         void OpenAudio() {
             Debug.WriteLine("OpenAudio...");
             waveIn = new WaveInEvent();
-            waveIn.WaveFormat = new WaveFormat(44100, 16, 2);
+            waveIn.WaveFormat = new WaveFormat(SampleRate, BitsPerSample, 1);
             waveIn.DataAvailable += DataAvailable;
-            waveIn?.StartRecording();
-            Debug.WriteLine("OpenAudio... ok");
+            waveIn.RecordingStopped += RecordingStopped;
+            waveIn.StartRecording();
+            Debug.WriteLine($"OpenAudio... ok, format: {waveIn.WaveFormat.SampleRate} Hz, {waveIn.WaveFormat.BitsPerSample}");
         }
 
         void CloseAudio() {
@@ -76,8 +95,9 @@ namespace AudioRezkaApp {
                 return;
             }
             waveIn.StopRecording();
-            waveIn.DataAvailable -= DataAvailable;
             waveIn.Dispose();
+            waveIn.DataAvailable -= DataAvailable;
+            waveIn.RecordingStopped -= RecordingStopped;
             waveIn = null;
             Debug.WriteLine("CloseAudio... ok");
         }
@@ -87,6 +107,7 @@ namespace AudioRezkaApp {
             if(waveIn == null) {
                 throw new Exception("WaveInEvent not ready");
             }
+
             var outputFolder = edWorkFolder.Text;
             Directory.CreateDirectory(outputFolder);
             var outputFilePath = Path.Combine(outputFolder, $"{edFilenamePrefix.Text}{edStartNumber.Value.ToString()}");
@@ -100,7 +121,7 @@ namespace AudioRezkaApp {
             btnRecord.BackColor = Color.FromArgb(255, 128, 128);
             btnRecord.Text = "RECORD";
             recording = true;
-            Debug.WriteLine("StartRecording... ok");
+            Debug.WriteLine($"StartRecording... ok");
         }
 
         void PauseRecording() {
@@ -119,41 +140,30 @@ namespace AudioRezkaApp {
         }
 
         void DataAvailable(object? sender, WaveInEventArgs args) {
-            var peakValue = GetPeakValue(args.Buffer);
+            var peakValue = PeakCalcHelper.GetPeak(waveIn!.WaveFormat.BitsPerSample, args.Buffer);
             ShowSignalLevel(peakValue);
 
+            var buffer = new WaveBuffer(args.Buffer);
             lock(lockWrite) {
                 if(writer != null) {
                     writer.Write(args.Buffer, 0, args.BytesRecorded);
 
                     if(DetectSilence(peakValue)) {
-                        if(writer.Position > waveIn?.WaveFormat.AverageBytesPerSecond * minVoiceDuration) {
+                        if(writer.Position > waveIn!.WaveFormat.AverageBytesPerSecond * minVoiceDuration) {
                             BeginInvoke(() => {
                                 PauseRecording();
                             });
                         }
-
                     }
                 }
             }
         }
 
-        float GetPeakValue(ReadOnlySpan<byte> pcm) {
-            float max = 0;
-            float avg = 0;
-            // interpret as 16 bit audio
-            for(var index = 0; index < pcm.Length; index += 2) {
-                short sample = (short)((pcm[index + 1] << 8) |
-                                        pcm[index + 0]);
-
-                var sample32 = sample / 32768f;
-                if(sample32 < 0) sample32 = -sample32;
-                if(sample32 > max) max = sample32;
-                avg += sample32;
-            }
-            return max;
+        void RecordingStopped(object? sender, StoppedEventArgs args) {
+            Debug.WriteLine("RecordingStopped...");
+            PauseRecording();
+            Debug.WriteLine("RecordingStopped... ok");
         }
-
 
         bool DetectSilence(float peakValue) {
             if(peakValue >= silenceThreshold) {
@@ -192,6 +202,17 @@ namespace AudioRezkaApp {
 
         private void edMinVoiceDuration_ValueChanged(object sender, EventArgs e) {
             minVoiceDuration = (int)edMinVoiceDuration.Value;
+        }
+
+        private void edSampleRate_SelectedIndexChanged(object sender, EventArgs e) {
+            if(waveIn == null) {
+                return;
+            }
+            if(waveIn.WaveFormat.SampleRate != SampleRate
+                || waveIn.WaveFormat.BitsPerSample != BitsPerSample) {
+                CloseAudio();
+                OpenAudio();
+            }
         }
     }
 }
