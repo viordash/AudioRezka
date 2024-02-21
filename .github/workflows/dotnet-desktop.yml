@@ -24,9 +24,18 @@ jobs:
     - name: Build
       run: dotnet build ./AudioRezkaApp/AudioRezkaApp.sln --configuration Release --no-restore
 
-    - name: Publish
+    - name: Publish single file & self-contained
       run: |
-        dotnet publish "./AudioRezkaApp\AudioRezkaApp/AudioRezkaApp.csproj" -c PublishRelease -r win-x64 -f net8.0-windows -p:PublishSingleFile=true --self-contained false -o "./out/win64" -p:DebugType=None
+        dotnet publish "./AudioRezkaApp\AudioRezkaApp/AudioRezkaApp.csproj" -c PublishRelease -r win-x64 -f net8.0-windows -p:PublishSingleFile=true --self-contained true -o "./out/win64_sfsc" -p:DebugType=None
+
+    - name: Publish self-contained
+      run: |
+        dotnet publish "./AudioRezkaApp\AudioRezkaApp/AudioRezkaApp.csproj" -c PublishRelease -r win-x64 -f net8.0-windows -p:PublishSingleFile=false --self-contained true -o "./out/win64_sc" -p:DebugType=None
+
+    - name: Publish single file 
+      run: |
+        dotnet publish "./AudioRezkaApp\AudioRezkaApp/AudioRezkaApp.csproj" -c PublishRelease -r win-x64 -f net8.0-windows -p:PublishSingleFile=true --self-contained false -o "./out/win64_sf" -p:DebugType=None
+
 
     - name: Deploy Win64
       uses: actions/upload-artifact@v4
