@@ -70,7 +70,7 @@ namespace AudioRezkaApp {
             Settings.Default.SilenceThreshold = edSilenceThreshold.Value;
             Settings.Default.SampleRate = SampleRate;
             Settings.Default.BitsPerSample = BitsPerSample;
-            Settings.Default.WaveInDevice = WaveInDevice;
+            Settings.Default.WaveInDevice = edWaveInDevice.SelectedIndex;
             Settings.Default.Save();
         }
 
