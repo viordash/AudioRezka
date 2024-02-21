@@ -150,6 +150,7 @@
             edMinVoiceDuration.Size = new Size(97, 23);
             edMinVoiceDuration.TabIndex = 11;
             edMinVoiceDuration.Value = new decimal(new int[] { 3, 0, 0, 0 });
+            edMinVoiceDuration.ValueChanged += edMinVoiceDuration_ValueChanged;
             // 
             // edMinSilenceDuration
             // 
@@ -159,6 +160,7 @@
             edMinSilenceDuration.Size = new Size(97, 23);
             edMinSilenceDuration.TabIndex = 14;
             edMinSilenceDuration.Value = new decimal(new int[] { 700, 0, 0, 0 });
+            edMinSilenceDuration.ValueChanged += edMinSilenceDuration_ValueChanged;
             // 
             // edSilenceThreshold
             // 
@@ -168,6 +170,7 @@
             edSilenceThreshold.Size = new Size(340, 45);
             edSilenceThreshold.TabIndex = 16;
             edSilenceThreshold.TickFrequency = 10;
+            edSilenceThreshold.Scroll += edSilenceThreshold_Scroll;
             // 
             // panel1
             // 

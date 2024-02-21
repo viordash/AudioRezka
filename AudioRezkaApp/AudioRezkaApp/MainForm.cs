@@ -10,6 +10,12 @@ namespace AudioRezkaApp {
         WaveFileWriter? writer = null;
         object lockWrite = new();
 
+        float silenceThreshold;
+        int minSilenceDuration;
+        int minVoiceDuration;
+        DateTime timerSilence;
+        DateTime timerSignalLevel;
+
         public MainForm() {
             InitializeComponent();
         }
@@ -22,6 +28,9 @@ namespace AudioRezkaApp {
             edMinVoiceDuration.Value = Settings.Default.MinVoiceDuration;
             edMinSilenceDuration.Value = Settings.Default.MinSilenceDuration;
             edSilenceThreshold.Value = Settings.Default.SilenceThreshold;
+            silenceThreshold = edSilenceThreshold.Value / 100f;
+            minSilenceDuration = (int)edMinSilenceDuration.Value;
+            minVoiceDuration = (int)edMinVoiceDuration.Value;
             OpenAudio();
         }
 
@@ -38,15 +47,9 @@ namespace AudioRezkaApp {
         }
 
         private void btnRecord_Click(object sender, EventArgs e) {
-            recording = !recording;
-
-            if(recording) {
-                btnRecord.BackColor = Color.FromArgb(255, 128, 128);
-                btnRecord.Text = "RECORD";
+            if(!recording) {
                 StartRecording();
             } else {
-                btnRecord.BackColor = SystemColors.Control;
-                btnRecord.Text = "PAUSE";
                 PauseRecording();
             }
         }
@@ -90,13 +93,22 @@ namespace AudioRezkaApp {
             outputFilePath = Path.ChangeExtension(outputFilePath, ".wav");
 
             lock(lockWrite) {
+                timerSilence = DateTime.Now;
+                timerSignalLevel = DateTime.Now;
                 writer = new WaveFileWriter(outputFilePath, waveIn.WaveFormat);
             }
+            btnRecord.BackColor = Color.FromArgb(255, 128, 128);
+            btnRecord.Text = "RECORD";
+            recording = true;
             Debug.WriteLine("StartRecording... ok");
         }
 
         void PauseRecording() {
             Debug.WriteLine("PauseRecording...");
+            btnRecord.BackColor = SystemColors.Control;
+            btnRecord.Text = "PAUSE";
+            recording = false;
+
             lock(lockWrite) {
                 writer?.Flush();
                 writer?.Dispose();
@@ -108,21 +120,27 @@ namespace AudioRezkaApp {
 
         void DataAvailable(object? sender, WaveInEventArgs args) {
             var peakValue = GetPeakValue(args.Buffer);
-
             ShowSignalLevel(peakValue);
+
             lock(lockWrite) {
                 if(writer != null) {
                     writer.Write(args.Buffer, 0, args.BytesRecorded);
 
-                    //if(writer.Position > waveIn.WaveFormat.AverageBytesPerSecond * 30) {
-                    //    waveIn.StopRecording();
-                    //}
+                    if(DetectSilence(peakValue)) {
+                        if(writer.Position > waveIn?.WaveFormat.AverageBytesPerSecond * minVoiceDuration) {
+                            BeginInvoke(() => {
+                                PauseRecording();
+                            });
+                        }
+
+                    }
                 }
             }
         }
 
         float GetPeakValue(ReadOnlySpan<byte> pcm) {
             float max = 0;
+            float avg = 0;
             // interpret as 16 bit audio
             for(var index = 0; index < pcm.Length; index += 2) {
                 short sample = (short)((pcm[index + 1] << 8) |
@@ -131,21 +149,49 @@ namespace AudioRezkaApp {
                 var sample32 = sample / 32768f;
                 if(sample32 < 0) sample32 = -sample32;
                 if(sample32 > max) max = sample32;
+                avg += sample32;
             }
             return max;
         }
 
-        DateTime updateSignalLevel = DateTime.Now;
+
+        bool DetectSilence(float peakValue) {
+            if(peakValue >= silenceThreshold) {
+                timerSilence = DateTime.Now;
+
+                Debug.WriteLine($"DetectSilence peak: {peakValue}");
+                return false;
+            }
+            if(DateTime.Now - timerSilence < TimeSpan.FromMilliseconds(minSilenceDuration)) {
+                return false;
+            }
+
+            Debug.WriteLine($"DetectSilence detected: {peakValue}");
+            return true;
+        }
+
         void ShowSignalLevel(float peakValue) {
-            if(DateTime.Now - updateSignalLevel < TimeSpan.FromMilliseconds(200)) {
+            if(DateTime.Now - timerSignalLevel < TimeSpan.FromMilliseconds(200)) {
                 return;
             }
             BeginInvoke(() => {
                 pbSignalLevel.Value = (int)(pbSignalLevel.Maximum * peakValue);
-                updateSignalLevel = DateTime.Now;
+                timerSignalLevel = DateTime.Now;
 
-                Debug.WriteLine($"ShowSignalLevel: {updateSignalLevel.Millisecond}");
+                //Debug.WriteLine($"ShowSignalLevel: {timerSignalLevel.Millisecond}");
             });
+        }
+
+        private void edMinSilenceDuration_ValueChanged(object sender, EventArgs e) {
+            minSilenceDuration = (int)edMinSilenceDuration.Value;
+        }
+
+        private void edSilenceThreshold_Scroll(object sender, EventArgs e) {
+            silenceThreshold = edSilenceThreshold.Value / 100f;
+        }
+
+        private void edMinVoiceDuration_ValueChanged(object sender, EventArgs e) {
+            minVoiceDuration = (int)edMinVoiceDuration.Value;
         }
     }
 }
