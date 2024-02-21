@@ -1,0 +1,38 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    types: [opened, reopened, edited]
+
+jobs:
+  build-publish-deploy-win:
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore ./AudioRezkaApp/AudioRezkaApp.sln
+    - name: Build
+      run: dotnet build ./AudioRezkaApp/AudioRezkaApp.sln --no-restore 
+    - name: Test
+      run: dotnet test ./AudioRezkaApp/AudioRezkaApp.sln --no-build --verbosity normal       
+
+    - name: Publish
+      run: |
+        dotnet publish "./AudioRezkaApp\AudioRezkaApp/AudioRezkaApp.csproj" -c PublishRelease -r win-x64 -f net8.0-windows -p:PublishSingleFile=true --self-contained true -o "./out/win64" -p:DebugType=None
+
+    - name: Deploy Win64
+      uses: actions/upload-artifact@v3
+      with:
+        name: win64
+        path: ./out/win64/
+        retention-days: 90
