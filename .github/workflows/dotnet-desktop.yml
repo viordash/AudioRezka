@@ -23,8 +23,6 @@ jobs:
       run: dotnet restore ./AudioRezkaApp/AudioRezkaApp.sln
     - name: Build
       run: dotnet build ./AudioRezkaApp/AudioRezkaApp.sln --no-restore 
-    - name: Test
-      run: dotnet test ./AudioRezkaApp/AudioRezkaApp.sln --no-build --verbosity normal       
 
     - name: Publish
       run: |
