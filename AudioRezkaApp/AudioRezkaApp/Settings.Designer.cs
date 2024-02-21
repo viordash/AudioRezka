@@ -58,5 +58,65 @@ namespace AudioRezkaApp {
                 this["WorkFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FilenamePrefix {
+            get {
+                return ((string)(this["FilenamePrefix"]));
+            }
+            set {
+                this["FilenamePrefix"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int StartNumber {
+            get {
+                return ((int)(this["StartNumber"]));
+            }
+            set {
+                this["StartNumber"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int MinVoiceDuration {
+            get {
+                return ((int)(this["MinVoiceDuration"]));
+            }
+            set {
+                this["MinVoiceDuration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("700")]
+        public int MinSilenceDuration {
+            get {
+                return ((int)(this["MinSilenceDuration"]));
+            }
+            set {
+                this["MinSilenceDuration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int SilenceThreshold {
+            get {
+                return ((int)(this["SilenceThreshold"]));
+            }
+            set {
+                this["SilenceThreshold"] = value;
+            }
+        }
     }
 }

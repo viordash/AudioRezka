@@ -35,7 +35,7 @@
             label3 = new Label();
             label5 = new Label();
             edWorkFolder = new TextBox();
-            edPrefix = new TextBox();
+            edFilenamePrefix = new TextBox();
             edStartNumber = new NumericUpDown();
             edMinVoiceDuration = new NumericUpDown();
             edMinSilenceDuration = new NumericUpDown();
@@ -127,12 +127,12 @@
             edWorkFolder.Size = new Size(298, 23);
             edWorkFolder.TabIndex = 3;
             // 
-            // edPrefix
+            // edFilenamePrefix
             // 
-            edPrefix.Location = new Point(23, 94);
-            edPrefix.Name = "edPrefix";
-            edPrefix.Size = new Size(327, 23);
-            edPrefix.TabIndex = 5;
+            edFilenamePrefix.Location = new Point(23, 94);
+            edFilenamePrefix.Name = "edFilenamePrefix";
+            edFilenamePrefix.Size = new Size(327, 23);
+            edFilenamePrefix.TabIndex = 5;
             // 
             // edStartNumber
             // 
@@ -163,9 +163,11 @@
             // edSilenceThreshold
             // 
             edSilenceThreshold.Location = new Point(3, 25);
+            edSilenceThreshold.Maximum = 100;
             edSilenceThreshold.Name = "edSilenceThreshold";
-            edSilenceThreshold.Size = new Size(330, 45);
+            edSilenceThreshold.Size = new Size(340, 45);
             edSilenceThreshold.TabIndex = 16;
+            edSilenceThreshold.TickFrequency = 10;
             // 
             // panel1
             // 
@@ -184,7 +186,7 @@
             // 
             pbSignalLevel.Location = new Point(11, 60);
             pbSignalLevel.Name = "pbSignalLevel";
-            pbSignalLevel.Size = new Size(313, 8);
+            pbSignalLevel.Size = new Size(323, 8);
             pbSignalLevel.TabIndex = 17;
             // 
             // label6
@@ -209,7 +211,7 @@
             Controls.Add(label3);
             Controls.Add(edStartNumber);
             Controls.Add(label2);
-            Controls.Add(edPrefix);
+            Controls.Add(edFilenamePrefix);
             Controls.Add(label1);
             Controls.Add(edWorkFolder);
             Controls.Add(btnSelectWorkFolder);
@@ -240,7 +242,7 @@
         private ToolTip toolTip1;
         private TextBox edWorkFolder;
         private Label label1;
-        private TextBox edPrefix;
+        private TextBox edFilenamePrefix;
         private Label label2;
         private NumericUpDown edStartNumber;
         private Label label3;

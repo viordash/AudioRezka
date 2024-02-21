@@ -10,14 +10,22 @@ namespace AudioRezkaApp {
 
         private void MainForm_Load(object sender, EventArgs e) {
             FormsHelper.LoadLocation(Settings.Default.MainFormLocation, this);
-            //FormsHelper.LoadSize(Settings.Default.MainFormSize, this);
             edWorkFolder.Text = Settings.Default.WorkFolder;
+            edFilenamePrefix.Text = Settings.Default.FilenamePrefix;
+            edStartNumber.Value = Settings.Default.StartNumber;
+            edMinVoiceDuration.Value = Settings.Default.MinVoiceDuration;
+            edMinSilenceDuration.Value = Settings.Default.MinSilenceDuration;
+            edSilenceThreshold.Value = Settings.Default.SilenceThreshold;
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e) {
             Settings.Default.MainFormLocation = Location;
-            //Settings.Default.MainFormSize = Size;
             Settings.Default.WorkFolder = edWorkFolder.Text;
+            Settings.Default.FilenamePrefix = edFilenamePrefix.Text;
+            Settings.Default.StartNumber = (int)edStartNumber.Value;
+            Settings.Default.MinVoiceDuration = (int)edMinVoiceDuration.Value;
+            Settings.Default.MinSilenceDuration = (int)edMinSilenceDuration.Value;
+            Settings.Default.SilenceThreshold = (int)edSilenceThreshold.Value;
             Settings.Default.Save();
         }
 
