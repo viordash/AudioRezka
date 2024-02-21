@@ -36,10 +36,23 @@ jobs:
       run: |
         dotnet publish "./AudioRezkaApp\AudioRezkaApp/AudioRezkaApp.csproj" -c PublishRelease -r win-x64 -f net8.0-windows -p:PublishSingleFile=true --self-contained false -o "./out/win64_sf" -p:DebugType=None
 
-
-    - name: Deploy Win64
+    - name: Deploy Win64 single file & self-contained
       uses: actions/upload-artifact@v4
       with:
-        name: AudioRezkaApp-win64
-        path: ./out/win64/
+        name: AudioRezkaApp-win64_sfsc
+        path: ./out/win64_sfsc/
+        retention-days: 90
+
+    - name: Deploy Win64 self-contained
+      uses: actions/upload-artifact@v4
+      with:
+        name: AudioRezkaApp-win64_sc
+        path: ./out/win64_sfsc/
+        retention-days: 90        
+
+    - name: Deploy Win64 single file 
+      uses: actions/upload-artifact@v4
+      with:
+        name: AudioRezkaApp-win64_sf
+        path: ./out/win64_sfsc/
         retention-days: 90
