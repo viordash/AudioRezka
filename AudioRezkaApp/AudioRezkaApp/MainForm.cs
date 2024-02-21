@@ -31,6 +31,10 @@ namespace AudioRezkaApp {
                 : Settings.Default.BitsPerSample;
         }
 
+        int WaveInDevice {
+            get => edWaveInDevice.SelectedIndex - 1;
+        }
+
         public MainForm() {
             InitializeComponent();
         }
@@ -45,6 +49,9 @@ namespace AudioRezkaApp {
             edSilenceThreshold.Value = Settings.Default.SilenceThreshold;
             edSampleRate.Text = Settings.Default.SampleRate.ToString();
             edBitsPerSample.Text = Settings.Default.BitsPerSample.ToString();
+
+            LoadWaveInDevicesCombo();
+            edWaveInDevice.SelectedIndex = Settings.Default.WaveInDevice;
 
             silenceThreshold = edSilenceThreshold.Value / 100f;
             minSilenceDuration = (int)edMinSilenceDuration.Value;
@@ -63,6 +70,7 @@ namespace AudioRezkaApp {
             Settings.Default.SilenceThreshold = edSilenceThreshold.Value;
             Settings.Default.SampleRate = SampleRate;
             Settings.Default.BitsPerSample = BitsPerSample;
+            Settings.Default.WaveInDevice = WaveInDevice;
             Settings.Default.Save();
         }
 
@@ -83,12 +91,13 @@ namespace AudioRezkaApp {
 
         void OpenAudio() {
             Debug.WriteLine("OpenAudio...");
-            waveIn = new WaveInEvent();
+            waveIn = new WaveInEvent() { DeviceNumber = WaveInDevice };
             waveIn.WaveFormat = new WaveFormat(SampleRate, BitsPerSample, 1);
             waveIn.DataAvailable += DataAvailable;
             waveIn.RecordingStopped += RecordingStopped;
             waveIn.StartRecording();
-            Debug.WriteLine($"OpenAudio... ok, format: {waveIn.WaveFormat.SampleRate} Hz, {waveIn.WaveFormat.BitsPerSample}");
+            Debug.WriteLine($"OpenAudio... ok, srate: {waveIn.WaveFormat.SampleRate} Hz, " +
+                $"bits: {waveIn.WaveFormat.BitsPerSample}, device: {WaveInDevice}");
         }
 
         void CloseAudio() {
@@ -218,10 +227,18 @@ namespace AudioRezkaApp {
                 return;
             }
             if(waveIn.WaveFormat.SampleRate != SampleRate
-                || waveIn.WaveFormat.BitsPerSample != BitsPerSample) {
+                || waveIn.WaveFormat.BitsPerSample != BitsPerSample
+                || waveIn.DeviceNumber != WaveInDevice) {
                 CloseAudio();
                 OpenAudio();
             }
+        }
+
+        private void LoadWaveInDevicesCombo() {
+            var devices = Enumerable.Range(-1, WaveIn.DeviceCount + 1).Select(n => WaveIn.GetCapabilities(n)).ToArray();
+
+            edWaveInDevice.DataSource = devices;
+            edWaveInDevice.DisplayMember = "ProductName";
         }
     }
 }

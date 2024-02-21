@@ -142,5 +142,17 @@ namespace AudioRezkaApp {
                 this["BitsPerSample"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int WaveInDevice {
+            get {
+                return ((int)(this["WaveInDevice"]));
+            }
+            set {
+                this["WaveInDevice"] = value;
+            }
+        }
     }
 }

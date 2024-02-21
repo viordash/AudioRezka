@@ -49,6 +49,8 @@
             label9 = new Label();
             label10 = new Label();
             edBitsPerSample = new ComboBox();
+            edWaveInDevice = new ComboBox();
+            label11 = new Label();
             ((System.ComponentModel.ISupportInitialize)edStartNumber).BeginInit();
             ((System.ComponentModel.ISupportInitialize)edMinVoiceDuration).BeginInit();
             ((System.ComponentModel.ISupportInitialize)edMinSilenceDuration).BeginInit();
@@ -101,7 +103,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(10, 130);
+            label2.Location = new Point(182, 75);
             label2.Name = "label2";
             label2.Size = new Size(151, 15);
             label2.TabIndex = 7;
@@ -137,12 +139,12 @@
             // 
             edFilenamePrefix.Location = new Point(23, 92);
             edFilenamePrefix.Name = "edFilenamePrefix";
-            edFilenamePrefix.Size = new Size(327, 23);
+            edFilenamePrefix.Size = new Size(138, 23);
             edFilenamePrefix.TabIndex = 5;
             // 
             // edStartNumber
             // 
-            edStartNumber.Location = new Point(23, 148);
+            edStartNumber.Location = new Point(196, 93);
             edStartNumber.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
             edStartNumber.Name = "edStartNumber";
             edStartNumber.Size = new Size(85, 23);
@@ -265,11 +267,32 @@
             edBitsPerSample.TabIndex = 24;
             edBitsPerSample.SelectedIndexChanged += edSampleRate_SelectedIndexChanged;
             // 
+            // edWaveInDevice
+            // 
+            edWaveInDevice.DropDownStyle = ComboBoxStyle.DropDownList;
+            edWaveInDevice.FormattingEnabled = true;
+            edWaveInDevice.Location = new Point(23, 149);
+            edWaveInDevice.Name = "edWaveInDevice";
+            edWaveInDevice.Size = new Size(327, 23);
+            edWaveInDevice.TabIndex = 26;
+            edWaveInDevice.SelectedIndexChanged += edSampleRate_SelectedIndexChanged;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(10, 131);
+            label11.Name = "label11";
+            label11.Size = new Size(75, 15);
+            label11.TabIndex = 27;
+            label11.Text = "Input device:";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(360, 439);
+            ClientSize = new Size(370, 439);
+            Controls.Add(label11);
+            Controls.Add(edWaveInDevice);
             Controls.Add(label10);
             Controls.Add(edBitsPerSample);
             Controls.Add(label9);
@@ -333,5 +356,7 @@
         private Label label9;
         private Label label10;
         private ComboBox edBitsPerSample;
+        private ComboBox edWaveInDevice;
+        private Label label11;
     }
 }
