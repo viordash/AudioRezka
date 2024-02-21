@@ -216,7 +216,6 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            MinimizeBox = false;
             MinimumSize = new Size(300, 320);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
