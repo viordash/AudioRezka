@@ -10,13 +10,13 @@ namespace AudioRezkaApp {
 
         private void MainForm_Load(object sender, EventArgs e) {
             FormsHelper.LoadLocation(Settings.Default.MainFormLocation, this);
-            FormsHelper.LoadSize(Settings.Default.MainFormSize, this);
+            //FormsHelper.LoadSize(Settings.Default.MainFormSize, this);
             edWorkFolder.Text = Settings.Default.WorkFolder;
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e) {
             Settings.Default.MainFormLocation = Location;
-            Settings.Default.MainFormSize = Size;
+            //Settings.Default.MainFormSize = Size;
             Settings.Default.WorkFolder = edWorkFolder.Text;
             Settings.Default.Save();
         }
@@ -39,5 +39,6 @@ namespace AudioRezkaApp {
             }
             edWorkFolder.Text = folderBrowserDialog1.SelectedPath;
         }
+
     }
 }
