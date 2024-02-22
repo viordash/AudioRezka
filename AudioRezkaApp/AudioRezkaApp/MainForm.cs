@@ -19,6 +19,8 @@ namespace AudioRezkaApp {
         float avgSignalLevel;
         int cntSignalLevel;
 
+        System.Timers.Timer startRecordingDelayTimer;
+
         int SampleRate {
             get => int.TryParse(edSampleRate.Text, out int sampleRate)
                 ? sampleRate
@@ -37,6 +39,15 @@ namespace AudioRezkaApp {
 
         public MainForm() {
             InitializeComponent();
+            startRecordingDelayTimer = new(TimeSpan.FromMilliseconds(300)) {
+                AutoReset = false,
+                Enabled = false
+            };
+            startRecordingDelayTimer.Elapsed += (s, e) => {
+                BeginInvoke(() => {
+                    StartRecording();
+                });
+            };
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
@@ -76,7 +87,8 @@ namespace AudioRezkaApp {
 
         private void btnRecord_Click(object sender, EventArgs e) {
             if(!recording) {
-                StartRecording();
+                startRecordingDelayTimer.Stop();
+                startRecordingDelayTimer.Start();
             } else {
                 PauseRecording();
             }
