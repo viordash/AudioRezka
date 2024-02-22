@@ -7,6 +7,14 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>app.ico</ApplicationIcon>
+    <SignAssembly>False</SignAssembly>
+    <Title>Recording and saving small audio files</Title>
+    <Authors>Viordash</Authors>
+    <Description>Recording and saving small audio files</Description>
+    <PackageProjectUrl>https://github.com/viordash/AudioRezka</PackageProjectUrl>
+    <PackageIcon>app.ico</PackageIcon>
+    <RepositoryUrl>https://github.com/viordash/AudioRezka</RepositoryUrl>
+    <Copyright>2024 viordash </Copyright>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="app.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Update="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
