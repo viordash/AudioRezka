@@ -1,9 +1,12 @@
-## Recording and saving small audio files
+## Record small audio files to create an audio dataset
 
 [![.NET](https://github.com/viordash/AudioRezka/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/viordash/AudioRezka/actions/workflows/dotnet-desktop.yml)
 
+Automatic recording pause when there is silence.
+
 Requirements:
  - Windows (x64)
+
 
 Main window when pausing:
 
